@@ -2,7 +2,7 @@ import express from "express"
 import dotenv from 'dotenv'
 import cors from 'cors';
 import connectDB from './config/db.js'
-import colors from 'colors';
+import colors from 'colors'
 
 import userRouter from "./router/userRouter.js";
 import {notFound,errorHandler} from './middleware/error.middleware.js'
