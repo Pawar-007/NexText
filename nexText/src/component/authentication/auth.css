@@ -1,0 +1,186 @@
+/* Style for the Login Container */
+.login-container {
+   max-width: 400px;
+   margin: 40px auto;
+   padding: 20px;
+   background-color: white;
+   border-radius: 8px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-heading {
+   text-align: center;
+   font-size: 24px;
+   margin-bottom: 20px;
+   color: #333;
+}
+
+.login-form {
+   display: flex;
+   flex-direction: column;
+}
+
+.form-group {
+   margin-bottom: 15px;
+}
+
+.form-group label {
+   display: block;
+   font-size: 14px;
+   margin-bottom: 5px;
+   color: #555;
+}
+
+.input-field {
+   width: 100%;
+   padding: 10px;
+   font-size: 14px;
+   border: 1px solid #442727;
+   border-radius: 4px;
+   outline: none;
+   box-sizing: border-box;
+}
+
+.input-field:focus {
+   border-color: #4CAF50;
+}
+
+.submit-btn {
+   width: 100%;
+   padding: 12px;
+   font-size: 16px;
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+   background-color: #45a049;
+}
+
+.signup-prompt {
+   text-align: center;
+   font-size: 14px;
+   margin-top: 20px;
+   color: #777;
+}
+
+.signup-link {
+   color: #4CAF50;
+   cursor: pointer;
+   text-decoration: underline;
+}
+
+/* Style for the Sign Up Container */
+.signup-container {
+   max-width: 500px;
+   margin: 40px auto;
+   padding: 20px;
+   background-color: white;
+   border-radius: 8px;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.signup-heading {
+   text-align: center;
+   font-size: 24px;
+   margin-bottom: 20px;
+   color: #333;
+}
+
+.signup-form {
+   display: flex;
+   flex-direction: column;
+}
+
+.form-group {
+   margin-bottom: 15px;
+}
+
+.form-group label {
+   display: block;
+   font-size: 14px;
+   margin-bottom: 5px;
+   color: #555;
+}
+
+.input-field {
+   width: 100%;
+   padding: 10px;
+   font-size: 14px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   outline: none;
+   box-sizing: border-box;
+}
+
+.input-field:focus {
+   border-color: #4CAF50;
+}
+
+/* Specific Style for File Input */
+.file-input {
+   background-color: white;
+   color: black;
+   padding: 10px;
+   border: 1px solid #ddd;
+}
+
+.file-input:focus {
+   border-color: #4CAF50;
+}
+
+.submit-btn {
+   width: 100%;
+   padding: 12px;
+   font-size: 16px;
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+   background-color: #45a049;
+}
+/* Toast.css */
+.toast {
+   position: fixed;
+   bottom: 20px;
+   left: 50%;
+   transform: translateX(-50%);
+   padding: 10px 20px;
+   border-radius: 5px;
+   color: white;
+   font-size: 16px;
+   z-index: 9999;
+   opacity: 0;
+   animation: fadeIn 0.5s forwards;
+}
+
+.toast.success {
+   background-color: green;
+}
+
+.toast.error {
+   background-color: red;
+}
+
+.toast.info {
+   background-color: blue;
+}
+
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+   }
+
+   to {
+      opacity: 1;
+   }
+}

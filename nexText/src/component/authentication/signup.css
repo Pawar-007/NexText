@@ -1,0 +1,65 @@
+/* Toast.css */
+.toast {
+   position: fixed;
+   bottom: 20px;
+   left: 50%;
+   transform: translateX(-50%);
+   padding: 10px 20px;
+   border-radius: 5px;
+   color: white;
+   font-size: 16px;
+   z-index: 9999;
+   opacity: 0;
+   animation: fadeIn 0.5s forwards;
+}
+
+.toast.success {
+   background-color: green;
+}
+
+.toast.error {
+   background-color: red;
+}
+
+.toast.info {
+   background-color: blue;
+}
+
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+   }
+
+   to {
+      opacity: 1;
+   }
+}
+
+.submit-btn {
+   position: relative;
+   padding: 10px 20px;
+   background-color: #4CAF50;
+   color: white;
+   border: none;
+   cursor: pointer;
+   font-size: 16px;
+}
+
+.spinner {
+   border: 2px solid transparent;
+   border-top: 2px solid #fff;
+   border-radius: 50%;
+   width: 20px;
+   height: 20px;
+   animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+   0% {
+      transform: rotate(0deg);
+   }
+
+   100% {
+      transform: rotate(360deg);
+   }
+}
