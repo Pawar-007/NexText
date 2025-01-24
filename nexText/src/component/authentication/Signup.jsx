@@ -93,6 +93,7 @@ async function handleSignup(e){
         draggable: true,
         theme: "dark",             // Dark theme for error toasts
       })
+      setLoading(false);
       return
      }
     try {

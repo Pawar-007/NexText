@@ -87,73 +87,79 @@ function Login() {
     <>
     <ToastContainer/>
     <div className="login-container">
-      <h3 className="login-heading">Login Form</h3>
-      <form className="login-form" onSubmit={(e)=>handleLogin(e)}>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <form className="form-floating">
-          <input type="email"
-           className="form-control" 
-           id="email" 
-           placeholder="Enter your email" 
-           value={email}
-          onChange={(e)=>setEmail(e.target.value)}
-          required 
-          />
-      <label for="floatingInputValue">Input with value</label>    
-      </form>
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <form className="form-floating">
-          <input type="password"
-           className="form-control input-field" 
-           id="password" 
-           placeholder="Enter your password" 
-           value={password}
-          onChange={(e)=>setPassword(e.target.value)}
-          required 
-          />
-      <label for="floatingInputValue">Input with value</label>    
-      </form>
-        </div>
-        
-        {
-          loading?
-          <div 
-      className="spinner-border" 
-      role="status" 
+  <h3 className="login-heading">Login Form</h3>
+  <form className="login-form" onSubmit={(e) => handleLogin(e)}>
+    <div className="form-group">
+      <label htmlFor="email">Email</label>
+      <div className="form-floating">
+        <input
+          type="email"
+          className="form-control"
+          id="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label htmlFor="email">Input with value</label>
+      </div>
+    </div>
+
+    <div className="form-group">
+      <label htmlFor="password">Password</label>
+      <div className="form-floating">
+        <input
+          type="password"
+          className="form-control input-field"
+          id="password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <label htmlFor="password">Input with value</label>
+      </div>
+    </div>
+
+    {loading ? (
+     <div
+      className="spinner-border"
+      role="status"
       style={{
-        width: '1.5rem', 
-        height: '1.5rem', 
-        position: 'absolute', 
-        top: '50%', 
-        left: '50%', 
-        transform: 'translate(-50%, -50%)'
+        width: '1rem', // Smaller size to fit inside the button
+        height: '1rem',
+        borderWidth: '0.15rem', // Adjust spinner thickness
+        margin: '0 auto',
       }}
     >
       <span className="visually-hidden">Loading...</span>
-    </div>:
-        <button 
-        type="submit" 
-        className="submit-btn"
-        onClick={handleLogin}>Login</button>
-        }
-        <button 
-        type="submit" 
-        className="submit-btn guest-button"
-        style={{ 
-        color: 'black', 
-        width: '100%', 
-        marginTop: '4px',
-        background:'red' 
-        }}
-        >Guest user </button>
-        <p className="signup-prompt">
-          Don't have an account? <span className="signup-link">Sign up</span>
-        </p>
-      </form>
     </div>
+    ) : (
+      <button type="submit" className="submit-btn">
+        Login
+      </button>
+    )}
+
+    <button
+      type="button"
+      className="submit-btn guest-button"
+      style={{
+        color: 'black',
+        width: '100%',
+        marginTop: '4px',
+        background: 'red',
+      }}
+      onClick={() => console.log("Guest user clicked!")}
+    >
+      Guest user
+    </button>
+
+    <p className="signup-prompt">
+      Don't have an account? <span className="signup-link">Sign up</span>
+    </p>
+  </form>
+</div>
+
     </>
   );
 }

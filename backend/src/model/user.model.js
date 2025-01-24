@@ -14,11 +14,8 @@ const userModel=mongoose.Schema({
    pic:{
       type:String,
       require:true,
-      default:"https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg?t=st=1736782220~exp=1736785820~hmac=83b6fba559704f18b00505d6ebb6bc3ce5c61af566c6750f289c15c896787430&w=740"
    }
-},{
-   timestamps:true
-})
+},{ timestamps: true })
 
 userModel.pre("save",async function(next){
      try {

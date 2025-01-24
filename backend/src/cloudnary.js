@@ -10,21 +10,20 @@ cloudinary.config({
    api_secret: process.env.API_SECRET
 })
 
-const uploadImage=asyncHandler(async(lacalPath)=>{
-   try {
-   const uploaded=await cloudinary.v2.uploader.upload(lacalPath,{
-      chunk_size:20000000,
-      resource_type:'image'
+   const uploadImage=asyncHandler(async(lacalPath)=>{
+      try {
+      const uploaded=await cloudinary.v2.uploader.upload(lacalPath,{
+         chunk_size:80000000,
+         resource_type:'image'
+      });
+      await fs.unlink(lacalPath);
+      console.log("image ",uploaded);
+      return uploaded.secure_url;
+      
+      } catch (error) {
+         console.error("❌ Error uploading image:", error);
+         throw new Error('Upload failed');
+      }
    });
-
-   await fs.unlink(lacalPath)
-   console.log("upload successfully ",uploaded);
-   return uploaded.secure_url;
-   
-   } catch (error) {
-      console.error("❌ Error uploading image:", error);
-      throw new Error('Upload failed');
-   }
-});
 
 export {uploadImage};

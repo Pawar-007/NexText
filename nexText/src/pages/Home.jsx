@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Box, Container, Text } from '@chakra-ui/react';
 import './Home.css'
 import Signup from '../component/authentication/Signup.jsx';
 import Login from '../component/authentication/Login.jsx';
+import { useNavigate } from 'react-router-dom';
 const styles = {
   container: {
     maxWidth: '500px',
@@ -37,12 +38,29 @@ const styles = {
   content: {
     marginTop: '20px',
   },
+  centeredContent: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh', // Full viewport height for centering
+    marginTop: 0, // Override margin for proper centering
+  },
 };
 
 
 
 function Home() {
   const [activeTab, setActiveTab] = useState('login'); // Define the activeTab state
+  const navigate=useNavigate();
+  useEffect(()=>{
+      const userInfo=JSON.parse(localStorage.getItem("userInfo"));
+      if(userInfo){
+         console.log("user home ",userInfo);
+        navigate("/chats");
+      }
+
+   },[navigate]);
+
 
   return (
     <Container  maxW={"xl"} centerContent>
