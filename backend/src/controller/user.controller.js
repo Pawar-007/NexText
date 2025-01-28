@@ -49,13 +49,12 @@ const registerUser=asyncHandler(async(req,res)=>{
 
 const login=asyncHandler(async(req,res)=>{
      const {email,password}=req.body;
-     
+     console.log("email ",email);
      if(!email || !password){
       res.status(401)
       throw new Error("invalid crediantial");
      }
      const user=await User.findOne({email});
-     console.log(user);
      if(!user){
       res.status(400).json({"message":"user not found "});
      }

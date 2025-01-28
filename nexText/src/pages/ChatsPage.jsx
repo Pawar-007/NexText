@@ -28,7 +28,7 @@ function ChatsPage() {
       height="91vh" // Full height minus potential header
       padding="10px"
       color="white"
-      flexDirection="row"
+
       >
       {user && <MyChats style={{ width: '30%' }} />} 
       {user && <ChatBox style={{ width: '65%' }} />} 

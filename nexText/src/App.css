@@ -2,10 +2,7 @@
 
 .app{
   min-height: 100vh;
-  display: flex;
   background-image: url('./assets/aug_8_01.jpg');
   background-size: cover;
-  justify-content: space-between;
-  
   max-width: 100%;
 }
