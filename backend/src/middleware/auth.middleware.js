@@ -13,6 +13,7 @@ const protect=asyncHandler(async (req,res,next)=>{
          const decode= jwt.verify(token,process.env.JWT_SECRET);
          console.log("auth body ",decode);
          req.user=await User.findById(decode.id).select("-password");
+
          next();
 
       } catch (error) {

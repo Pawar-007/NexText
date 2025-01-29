@@ -70,18 +70,20 @@ const login=asyncHandler(async(req,res)=>{
          _id:user._id,
          name:user.name,
          pic:user.pic,
+         email:user.email,
          token:generateToken(user._id)
      })
 })
 // /api/user?user=bhushan
 const alluser=asyncHandler(async(req,res,)=>{
+  console.log("query ",req.query);
     const search=req.query.search?.trim();
     const key=search?
     {
       $or:[
     { name: { $regex: req.query.search, $options: 'i' } }, // Name starts with 'A'
     { email: { $regex: req.query.search, $options: 'i' } } // Email ends with 'example.com'
-  ]
+  ] 
     }:{}
     //console.log("key ",JSON.stringify(key, null, 2));
     const user=await User.find(key).find({_id:{$ne:req.user._id}});

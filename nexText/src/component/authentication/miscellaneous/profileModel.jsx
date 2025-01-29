@@ -1,43 +1,51 @@
-import React from 'react';
-import {
-  useDisclosure
-} from '@chakra-ui/react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-function ProfileModel({user,children}) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+import {  Image,Text } from '@chakra-ui/react';
+
+
+function ProfileModel({ user, children }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+   
   return (
     <>
-     {children?(
-      <span onClick={onOpen}>
-        {children}
-      </span>
-    ):
-    (
-      <i className="fas fa-bell"></i>
-     )
-   }
-   <div>
-      <Modal isOpen={isOpen} onHide={handleClose}>
+      {children ? (
+        <span onClick={handleShow} style={{ cursor: 'pointer' }}>
+          {children}
+        </span>
+      ) : (
+        <i className="fas fa-bell" onClick={handleShow} style={{ cursor: 'pointer' }}></i>
+      )}
+
+      <Modal show={show} onHide={handleClose}
+      style={{marginTop:"50px"}}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>{user.name}</Modal.Title>
+          <Modal.Title>{user?.name || 'Guest user'}</Modal.Title>
         </Modal.Header>
-        <Modal.Body></Modal.Body>
+        <Modal.Body
+        style={{display:"flex",flexDirection:"column",alignItems:"center"}}
+        >
+          <Image
+          borderRadius="full"
+          boxSize="150px"
+          src={user?.pic}
+          alt={user?.name}
+          />
+          <Text
+          fontSize={{base:"26px",md:"29px"}}
+          fontFamily="work sans"
+          >{user?.email}</Text>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary">
-            Save Changes
-          </Button>
         </Modal.Footer>
       </Modal>
-    </div>
     </>
-  )
+  );
 }
 
 export default ProfileModel;
