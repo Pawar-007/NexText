@@ -17,4 +17,4 @@ function ChatLoading() {
   )
 }
 
-export default ChatLoading
+export default ChatLoading;

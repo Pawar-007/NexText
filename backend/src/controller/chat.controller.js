@@ -60,14 +60,14 @@ const fetchChats=asyncHandler(async(req,res)=>{
             path:'latestMessage.sender',
             select:"name pic email"
           })
-
+          console.log("result",result);
           res.status(200).send(result);
          })
 
    } catch (error) {
       res.status(400);
       throw new Error(error.message);
-   }
+   } 
 })
 
 const createGroupChat=asyncHandler(async(req,res)=>{

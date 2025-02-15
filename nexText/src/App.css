@@ -6,3 +6,38 @@
   background-size: cover;
   max-width: 100%;
 }
+
+/* app.css */
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+html {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+}
+
+/* Ensure the body takes up the full height of the viewport */
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* Prevent scrolling on the body */
+}
+
+/* Allow scrolling within the main content area */
+#root,
+.app-container,
+.main-content {
+  overflow-y: auto;
+  /* Enable scrolling */
+  height: 100vh;
+  /* Full viewport height */
+  -webkit-overflow-scrolling: touch;
+  /* Smooth scrolling on touch devices */
+}

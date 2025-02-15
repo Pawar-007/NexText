@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/drawer"
 import ChatLoading from '../../ChatLoading.jsx';
 import axios from 'axios';
-
+import UserListItem from './../../UserListItem.jsx';
 function SideDrawer() {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -27,7 +27,7 @@ function SideDrawer() {
   const [open, setOpen] = useState(false);
   
   const navigate=useNavigate();
-  const {user}= ChatState();
+  const {user,setSelectedChat,chats,setChats}= ChatState();
     const logout=()=>{
     localStorage.removeItem("userInfo");
     navigate("/")
@@ -86,6 +86,42 @@ function SideDrawer() {
      } 
      setLoading(false);
       return;
+  }
+
+  const accessChat=async (userId)=>{
+    try {
+      setLoadingChat(true);
+      const config = {
+        headers:{
+          "Authorization": `Bearer ${user.token}`,
+          "content-type":"application/json"
+        }
+      }
+
+      const {data}=await axios.post(`http://localhost:8000/app/chats`,{userId},config);
+      
+      if(!chats.find(chat=>chat._id===data._id)){setChats([data,...chats])}
+      setSelectedChat(data);
+      setLoadingChat(false);
+      setOpen(false);
+    } catch (error) {
+      toast.error(
+        <div>
+          <strong>Error:</strong> Faild to access chat
+        </div>,
+        {
+          position: "top-left",
+          autoClose: 3000,            // Time limit (3 seconds)
+          hideProgressBar: true,     // Hide progress bar
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",             // Dark theme for error toasts
+        }
+      )
+      setLoadingChat(false);
+      setOpen(false);
+    }
   }
   return (
     <>
@@ -197,25 +233,13 @@ function SideDrawer() {
         loading?(<ChatLoading/>):
         (searchResult?.map((user)=>{
           return(
-            <button 
-            style={{border:"2px solid black",backgroundColor:"white",width:"100%",marginBottom:"10px"}}
-            >
-              <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            p={2}
-            borderBottomWidth="1px"
-            key={user._id}
-            >
-              <Avatar name={user.name} src={user.pic} size="sm"/>
-              <Text>{user.name}</Text>
-            </Box>
-            </button>
+            <UserListItem key={user?._id} user={user} handleFunction={()=>{accessChat(user?._id)}} />
           )
         }))
       }
+      {loadingChat && <ChatLoading/>}
       </DrawerBody>
+
     <DrawerFooter />
   </DrawerContent>
 </DrawerRoot>

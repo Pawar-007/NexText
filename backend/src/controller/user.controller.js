@@ -86,7 +86,7 @@ const alluser=asyncHandler(async(req,res,)=>{
   ] 
     }:{}
     //console.log("key ",JSON.stringify(key, null, 2));
-    const user=await User.find(key).find({_id:{$ne:req.user._id}});
+    const user=await User.find(key).find({_id:{$ne:req.user._id}}).select("-password");
     return res.send(user); 
 
 })

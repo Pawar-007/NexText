@@ -3,6 +3,7 @@ import User from "../model/user.model.js";
 import jwt from 'jsonwebtoken';
 
 const protect=asyncHandler(async (req,res,next)=>{
+   console.log("auth body ",req.headers);
    let token;
    if(req.headers.authorization && 
       req.headers.authorization.startsWith("Bearer")
@@ -11,7 +12,7 @@ const protect=asyncHandler(async (req,res,next)=>{
          token=req.headers.authorization.split(" ")[1];
          
          const decode= jwt.verify(token,process.env.JWT_SECRET);
-         console.log("auth body ",decode);
+         console.log("auth body ",token);
          req.user=await User.findById(decode.id).select("-password");
 
          next();
