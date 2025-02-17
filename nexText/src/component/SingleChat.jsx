@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { ChatState } from '../context/ChatProvider'
 import { Box,IconButton,Text } from '@chakra-ui/react';
 import CloseButton from 'react-bootstrap/CloseButton'
+import getSender,{getSenderFull } from '../config/ChatLogic.js';
+import ProfileModel from './authentication/miscellaneous/profileModel.jsx';
 function SingleChat() {
   const {user,selectedChat,setSelectedChat}=ChatState();
   return (
@@ -17,13 +19,34 @@ function SingleChat() {
       display="flex"
       justifyContent={{base:"space-between"}}
       alignItems="center"
+      color="black"
       >
-      <CloseButton
+      <Box
+      d={{base:"flex",md:"none"}}
       style={{
-         display:"none"
+         justifyItems:"center",
+         backgroundColor:"gray",
+         color:"black",
+         padding:"8px",
+         fontSize:"large",
+         borderRadius:"5px"
       }}
-      onClick={()=>setSelectedChat('')}
-      />
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+      </svg>
+      </Box>
+      {!selectedChat.isGroupChat?(
+         <>
+         {getSender(user,selectedChat.users)}
+         <ProfileModel user={getSenderFull(user,selectedChat.users)}/>
+         </>
+      ):(
+         <>
+         {selectedChat.chatName.toUpperCase()}
+
+         </>
+      )}
       </Text>
       </>
    ):

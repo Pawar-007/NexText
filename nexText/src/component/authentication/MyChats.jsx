@@ -20,7 +20,7 @@ function MyChats({fetchAgain}) {
           Authorization:`Bearer ${user.token}`,
         }}
         const {data} = await axios.get(`/app/chats`, config);
-        console.log("chats",data);
+        console.log("delete");
         setChats(data);
       }
         
@@ -94,7 +94,8 @@ function MyChats({fetchAgain}) {
        
        >
           {chats.map((chat)=>{
-            return(
+           console.log(chat)
+           return(
               <Box
                key={chat._id}
              onClick={()=>setSelectedChat(chat)}

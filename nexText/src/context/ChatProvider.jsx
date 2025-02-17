@@ -15,7 +15,6 @@ useEffect(()=>{
       setUser(userInfo);
       
       if (userInfo) {
-        console.log("User context initialized:", userInfo);
         navigate("/chats");
       }
     } catch (error) {

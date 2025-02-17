@@ -172,11 +172,24 @@ const removeToGroup=asyncHandler(async(req,res)=>{
    }
 })
 
+const deleteUserChat=asyncHandler(async(req,res)=>{
+   const chatId=req.params.id;
+   console.log("chatId",chatId)
+   const deleterChat=await Chat.findByIdAndDelete(chatId);
+   
+   if(!deleterChat){
+      res.status(400).json({message:"faild to delete chat"});
+      return;
+   }
+
+   res.status(200).json({message:"user chat deleted successfully"});
+})
 export {
    accessChat,
    fetchChats,
    createGroupChat,
    renameGroup,
    addToGroup,
-   removeToGroup
+   removeToGroup,
+   deleteUserChat
  };
