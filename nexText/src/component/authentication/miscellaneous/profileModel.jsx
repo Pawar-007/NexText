@@ -7,7 +7,7 @@ function ProfileModel({ user, children }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-   console.log("user ",user)
+  
   return (
     <>
       {children ? (

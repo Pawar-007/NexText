@@ -4,8 +4,10 @@ import { Box,IconButton,Text } from '@chakra-ui/react';
 import CloseButton from 'react-bootstrap/CloseButton'
 import getSender,{getSenderFull } from '../config/ChatLogic.js';
 import ProfileModel from './authentication/miscellaneous/profileModel.jsx';
+import UpdateGroupChatModal from './../component/authentication/miscellaneous/UpdateGroupChatModal.jsx';
 function SingleChat() {
   const {user,selectedChat,setSelectedChat}=ChatState();
+  const {fetchAgain,setFetchAgain}=useState('');
   return (
    <>
    {selectedChat?(
@@ -22,7 +24,7 @@ function SingleChat() {
       color="black"
       >
       <Box
-      d={{base:"flex",md:"none"}}
+      display={{base:"flex",md:"none"}}
       style={{
          justifyItems:"center",
          backgroundColor:"gray",
@@ -44,10 +46,24 @@ function SingleChat() {
       ):(
          <>
          {selectedChat.chatName.toUpperCase()}
-
+         <UpdateGroupChatModal
+         fetchAgain={fetchAgain}
+         setFetchAgain={setFetchAgain}
+         />
          </>
       )}
       </Text>
+      <Box
+      d="flex"
+      flexDir="column"
+      justifyContent="flex-end"
+      bg="#E8E8E8"
+      w="100%"
+      h="100%"
+      borderRadius="1g"
+      overflowY="hidden"
+      >
+      </Box>
       </>
    ):
    <Box

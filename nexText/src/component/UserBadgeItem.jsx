@@ -15,7 +15,7 @@ function UserBadgeItem({user,handleFunction}) {
     onClick={handleFunction}
     >
       {user.name}
-      <button type="button" class="btn-close" disabled aria-label="Close" 
+      <button type="button" className="btn-close" disabled aria-label="Close" 
       style={{marginLeft:"2px",color:"white"}}></button>
     </Box>
   )
