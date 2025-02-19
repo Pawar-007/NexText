@@ -178,6 +178,7 @@ async function handleSignup(e){
           <label htmlFor="username">Username</label>
           <input 
             type="text" 
+          
             id="username" 
             placeholder="Enter your username" 
             className="input-field" 

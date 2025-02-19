@@ -20,7 +20,6 @@ function MyChats({fetchAgain}) {
           Authorization:`Bearer ${user.token}`,
         }}
         const {data} = await axios.get(`/app/chats`, config);
-        console.log("delete");
         setChats(data);
       }
         
@@ -47,15 +46,18 @@ function MyChats({fetchAgain}) {
     >
     <Box
     px={3}
-  fontSize={{ base: "28px", md: "30px" }}
-  fontFamily="Work Sans"
-  justifyContent="space-between"
-  alignItems="center"
-  display="flex"
-  color="black"
+    fontSize={{ base: "28px", md: "30px" }}
+    fontFamily="Work Sans"
+    display="flex"
+    justifyContent="space-between"
+    width="100%"
+    margin="5px"
     >
-    <h1>Chats</h1>
-    <GroupChatModeal>
+    <h1
+    style={{fontFamily:"work sans"}}
+    >chats</h1>
+    <Box>
+      <GroupChatModeal>
       <button
     style={{
     display: "flex",
@@ -77,6 +79,8 @@ function MyChats({fetchAgain}) {
 <i className="bi bi-plus"> New Group</i> 
 </button>
     </GroupChatModeal>
+    </Box>
+    
 
     </Box>
 
@@ -94,7 +98,6 @@ function MyChats({fetchAgain}) {
        
        >
           {chats.map((chat)=>{
-           console.log(chat)
            return(
               <Box
                key={chat._id}

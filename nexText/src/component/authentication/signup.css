@@ -63,3 +63,10 @@
       transform: rotate(360deg);
    }
 }
+
+
+.input-field{
+   background-color: whitesmoke;
+   color: black;
+   font-family: "work-sans";
+}

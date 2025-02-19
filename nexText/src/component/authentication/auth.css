@@ -184,3 +184,9 @@
       opacity: 1;
    }
 }
+
+.form-control{
+   columns: black;
+   background-color: white;
+
+}

@@ -17,6 +17,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
   const [loading,setloading]=useState(false);
   const [renameLoading,setRenameLoading]=useState(false);
   const [newMember,setNewMember]=useState([]);
+  const [addLoading,setAddLoading]=useState(false);
   const {selectedChat,setSelectedChat,user}=ChatState();
   
   const handleClose = () => setShow(false);
@@ -48,12 +49,13 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
           <strong>Error:</strong> Faild to access chat
         </div>,
         {
-          position: "top-center",
-          autoClose: 1000,            // Time limit (3 seconds)
+           position: "top-left",
+          autoClose: 3000,            // Time limit (3 seconds)
           hideProgressBar: true,     // Hide progress bar
           closeOnClick: true,
+          pauseOnHover: true,
           draggable: true,
-          theme: "dark",             // Dark theme for error toasts
+          theme: "dark",               // Dark theme for error toasts
         }
       )
      
@@ -65,7 +67,6 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
 
       try {
         setRenameLoading(true);
-        console.log("token",user.token);
         const config={
           headers:{
             "Authorization": `Bearer ${user.token}`
@@ -77,28 +78,27 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
         },config);
         console.log("data",data);
         setSelectedChat(data);
-        setFetchAgain(!fetchAgain);
+        
         setRenameLoading(false);
-
       } catch (error) {
         setRenameLoading(false);
-        toast.error(  
-        <div>
-          <strong>Error:</strong> rename fail
-        </div>,
+        console.error("Rename Chat Error:", error.response?.data || error.message);
+        toast.warning(
+          <div>
+          <strong>Warning:</strong>"faild to update name"
+         </div>,
         {
           position: "top-center",
-          autoClose: 3000,            
-          hideProgressBar: true,     
+          autoClose: 2000,            
+          hideProgressBar: true,    
           closeOnClick: true,
-          pauseOnHover: true,
           draggable: true,
-          theme: "dark",             
+          theme: "dark",            
         }
-      )
-      
+        )
       }
-      setGroupChatName("");
+    setGroupChatName('');
+
   }
   const handleGroup=(user1)=>{
     console.log(user);
@@ -157,10 +157,49 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
     console.log(newMember);
         setNewMember(newMember.filter((u)=>u._id!==user._id));
    }
+    
+   const addMenberInGroup=async()=>{
+    if(!newMember) return;
+    try {
+      setAddLoading(true);
+      const config={
+        headers:{
+          "Authorization": `Bearer ${user.token}`,
+        }
+      }
+      const newUserIds=newMember?.map((u)=>u._id);
+      const {data}=await axios.put("/app/chats/addIngroup",{
+        chatId:selectedChat._id ,
+        userIds:newUserIds
+      },config);
+      
+      setSelectedChat(data);
+      setNewMember('');
 
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        <div>
+          <strong>error</strong> member not added
+        </div>,{
+          
+          position: "top-left",
+          autoClose: 3000,            // Time limit (3 seconds)
+          hideProgressBar: true,     // Hide progress bar
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",             // Dark theme for error toasts
+        
+        }
+      )
+    }finally{
+      setAddLoading(false);
+    }
+   }
   return (
     <>
-      <ToastContainer/>
+    <ToastContainer/>
       <Button onClick={handleShow}
       style={{backgroundColor:"gray",border:"none",}}
       >
@@ -265,6 +304,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
         )
        }
        </Box>
+       <Box onClick={()=>addMenberInGroup()}>add</Box>
     </Form>
           
           </Modal.Body>

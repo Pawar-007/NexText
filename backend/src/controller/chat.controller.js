@@ -9,8 +9,8 @@ const accessChat=asyncHandler(async(req,res)=>{
       console.log("userId params not send with request");
       return res.sendStatus(400)
    }
-
-   let isChat=await User.find({
+   console.log(`reciverId ${req.user._id} and senderId ${userId}`)
+   let isChat=await Chat.find({
       isGroupChat:false,
       $and :[
          {users:{$elemMatch : { $eq: req.user._id}}},
@@ -22,8 +22,9 @@ const accessChat=asyncHandler(async(req,res)=>{
       path:'latestMessage.sender',
       select:"name pic email"
    })
-   
+
    if(isChat.length > 0){
+     
       res.send(isChat[0])
    }
    else{
@@ -134,12 +135,13 @@ const renameGroup=asyncHandler(async(req,res)=>{
 })
 
 const addToGroup=asyncHandler(async(req,res)=>{
-   const {chatId ,userId }=req.body;
+   const {chatId ,userIds }=req.body;
    
+   console.log(chatId ,userIds);
    const added=await Chat.findByIdAndUpdate(
       chatId,
       {
-         $push:{users:userId},
+         $push:{users:{$each : userIds}},
       },
       {new:true},
    ).populate("users","-password").populate("groupAdmin","-password");
