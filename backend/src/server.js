@@ -7,7 +7,7 @@ import colors from 'colors'
 import userRouter from "./router/userRouter.js";
 import {notFound,errorHandler} from './middleware/error.middleware.js'
 import chatroute from "./router/chatroutes.js";
-
+import messageRouter from "./router/messageRouter.js";
 dotenv.config({
    path:".env"
 });
@@ -32,7 +32,7 @@ app.get("/",(req,res)=>{
 
 app.use('/app/user',userRouter);
 app.use('/app/chats',chatroute);
-
+app.use('/app/Message',messageRouter);
 app.listen(process.env.PORT,()=>{
    console.log(`server running successfully ${process.env.PORT}`);
 })
