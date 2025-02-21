@@ -9,7 +9,7 @@ import {Form} from 'react-bootstrap'
 import axios from 'axios';
 import { toast,ToastContainer } from 'react-toastify';
 import UserListItem from '../../UserListItem.jsx';
-function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
+function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
   const [show, setShow] = useState(false);
   const [groupChatName,setGroupChatName]=useState();
   const [searchReasult,setSearchReasult]=useState();
@@ -22,7 +22,9 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const handleRemove=(u)=>{}
+  const handleRemove=(u)=>{
+      fetchMessage();
+  }
   
   const handleSearch=async (query)=>{
        setSearch(query);
@@ -44,6 +46,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
         setSearchReasult(data);
        } catch (error) {
         setloading(false);
+        setSearchReasult('');
         toast.error(
         <div>
           <strong>Error:</strong> Faild to access chat
@@ -101,7 +104,6 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain}) {
 
   }
   const handleGroup=(user1)=>{
-    console.log(user);
         if(selectedChat.groupAdmin._id !== user._id){
             toast.warning(
           <div>
