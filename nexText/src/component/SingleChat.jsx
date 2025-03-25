@@ -10,6 +10,11 @@ import axios from 'axios';
 import './singleChat.css'
 import { toast } from 'react-toastify';
 import ScrollableChat from './ScrollableChat.jsx';
+import { io } from 'socket.io-client';
+const ENDPOINT='http://localhost:8000'
+var socket ,selectedChatCompare;
+
+
 function SingleChat() {
   const {user,selectedChat,setSelectedChat}=ChatState();
   const {fetchAgain,setFetchAgain}=useState('');
@@ -17,10 +22,17 @@ function SingleChat() {
   const [newMessage,setNewMessage]=useState("");
   const [loading,setLoading]=useState(false);
   const [message,setMessage]=useState([]);
-
+  const [socketConnected,setSocketConnected]=useState(false);
   const handleBack=()=>{
    setSelectedChat('');
   }
+    useEffect(()=>{
+       socket=io(ENDPOINT);
+       socket.emit("setup",user);
+       socket.on("connected",()=>
+         setSocketConnected(true)
+       )
+   },[])
   const fetchMessage=async()=>{
        if(!selectedChat) return;
        setLoading(true);
@@ -34,6 +46,7 @@ function SingleChat() {
         const {data}=await axios.get(`app/message/${selectedChat._id}`,config);
         console.log("message send ",data);
         setMessage(data);
+        socket.emit("join room",selectedChat._id);
        } catch (error) {
          toast.error(
             <div>
@@ -56,23 +69,72 @@ function SingleChat() {
 
   useEffect(()=>{
      fetchMessage();
+     selectedChatCompare=selectedChat
   },[selectedChat])
+
+  useEffect(()=>{
+   socket.on("Message recieved",(newMessageRecived)=>{
+      console.log("new message recived",newMessageRecived);
+      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id){
+         // give notification 
+      }else{
+         setMessage((prevMessages) => {
+           if (prevMessages.some((msg) => msg._id === newMessageRecived._id)) {
+          return prevMessages; // Return the same state if message already exists
+          }
+          return [...prevMessages, newMessageRecived]; // Append new message if not duplicate
+});
+      }
+   })
+   return () => {
+        socket.off("new Message");  // Clean up to avoid multiple listeners
+    };
+  })
+// useEffect(() => {
+//     const handleNewMessage = (newMessageRecived) => {
+//         console.log("new message received", newMessageRecived);
+        
+//         if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
+//             // Give notification 
+//         } else {
+//             setMessage((prevMessages) => {
+//            if (prevMessages.some((msg) => msg._id === newMessageRecived._id)) {
+//           return prevMessages; // Return the same state if message already exists
+//           }
+//           return [...prevMessages, newMessageRecived]; // Append new message if not duplicate
+// });
+
+//         }
+//     };
+
+    
+//     socket.off("Message recieved", handleNewMessage); // Ensure no duplicate listeners
+//     socket.on("Message recieved", handleNewMessage);
+
+//     return () => {
+//         socket.off("Message recieved", handleNewMessage); // Cleanup on unmount
+//     };
+// }, [socket, selectedChatCompare]); // Dependencies to re-run the effect
+
   const sendMessage=async(event)=>{
       if(event.key === 'Enter' && newMessage){
          event.preventDefault();
          try {
-            setNewMessage("");
+            
             const config={
                headers:{
                   "authorization":`Bearer ${user.token}`,
                   "Content-Type":"application/json"
                }
             }
-
+            setNewMessage("")
             const {data}=await axios.post('/app/message',{
                content:newMessage,
-               chatId:selectedChat._id
+               chatId:selectedChat._id 
             },config);
+            console.log(`message send ${await data}`);
+            
+            socket.emit("new Message",data);
             setMessage([...message,data]);
 
          } catch (error) {
@@ -96,7 +158,9 @@ function SingleChat() {
   const typingHandlar=(e)=>{
    e.preventDefault();
         setNewMessage(e.target.value);
-  }
+  };
+
+
   return (
    <>
    {selectedChat?(
@@ -169,7 +233,7 @@ function SingleChat() {
       ):(
       <>
          <div className='message'>
-             <ScrollableChat message={message} />
+             <ScrollableChat messages={message} />
          </div>
          <Box>
             <Form>

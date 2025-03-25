@@ -22,13 +22,64 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const handleRemove=(u)=>{
-      fetchMessage();
+  const handleRemove=async (user1)=>{
+      if(selectedChat.groupAdmin._id!==user._id && user._id!==user1._id){
+        toast.warning(
+          <div>
+            Only admin can remove somone!
+          </div>,
+          {
+          position: "top-center",
+          autoClose: 2000,            // Time limit (3 seconds)
+          hideProgressBar: true,     // Hide progress bar
+          closeOnClick: true,
+          draggable: true,
+          theme: "dark",             // Dark theme for error toasts
+        }
+        )
+        return;
+      }
+
+      try {
+        setloading(true);
+        const config={
+           headers:{
+            Authorization:`Bearer ${user.token}`
+           }
+        }
+        const {data}=await axios.put("/app/chats/groupremove",{
+          chatId:selectedChat._id,
+          userId:user1._id
+        },config);
+        console.log("data",data);
+        user1._id===user._id?setSelectedChat(''):setSelectedChat(data);
+        setFetchAgain(!fetchAgain);
+        fetchMessage();
+        setloading(false);  
+      } catch (error) {
+        setloading(false);
+        toast.error(
+      <div>
+       <strong>Error:</strong> Failed to remove user.
+  </div>,
+  { 
+    position: "top-left",
+    autoClose: 3000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  }
+);
+
+      }
   }
   
   const handleSearch=async (query)=>{
        setSearch(query);
        if(!query){
+        setNewMember([]);
         return;
        }
        console.log(query);
@@ -46,7 +97,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
         setSearchReasult(data);
        } catch (error) {
         setloading(false);
-        setSearchReasult('');
+        setSearchReasult([]);
         toast.error(
         <div>
           <strong>Error:</strong> Faild to access chat
@@ -61,7 +112,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
           theme: "dark",               // Dark theme for error toasts
         }
       )
-     
+       setloading(false);
        }
   }
 
@@ -176,8 +227,8 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
       },config);
       
       setSelectedChat(data);
-      setNewMember('');
-
+      setNewMember([]);
+      
     } catch (error) {
       console.log(error);
       toast.error(
@@ -311,7 +362,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
           
           </Modal.Body>
         <Modal.Footer>
-          <Button  onClick={()=>handleRemove(user)}
+          <Button 
             style={{
               backgroundColor:"red",
               border:"none",

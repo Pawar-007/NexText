@@ -9,7 +9,7 @@ const accessChat=asyncHandler(async(req,res)=>{
       console.log("userId params not send with request");
       return res.sendStatus(400)
    }
-   console.log(`reciverId ${req.user._id} and senderId ${userId}`)
+ 
    let isChat=await Chat.find({
       isGroupChat:false,
       $and :[
@@ -61,7 +61,7 @@ const fetchChats=asyncHandler(async(req,res)=>{
             path:'latestMessage.sender',
             select:"name pic email"
           })
-          console.log("result",result);
+        
           res.status(200).send(result);
          })
 
@@ -75,7 +75,7 @@ const createGroupChat=asyncHandler(async(req,res)=>{
          if(!req.body.users || !req.body.name){
             return res.status(400).send({message:"please fill the all fields"})
          }
-        console.log("body ",req.body);
+      
         let users = req.body.users; // Directly access the users array
         if (!Array.isArray(users)) {
          return res.status(400).send("Invalid input: users must be an array");
@@ -137,7 +137,7 @@ const renameGroup=asyncHandler(async(req,res)=>{
 const addToGroup=asyncHandler(async(req,res)=>{
    const {chatId ,userIds }=req.body;
    
-   console.log(chatId ,userIds);
+  
    const added=await Chat.findByIdAndUpdate(
       chatId,
       {
@@ -176,7 +176,7 @@ const removeToGroup=asyncHandler(async(req,res)=>{
 
 const deleteUserChat=asyncHandler(async(req,res)=>{
    const chatId=req.params.id;
-   console.log("chatId",chatId)
+
    const deleterChat=await Chat.findByIdAndDelete(chatId);
    
    if(!deleterChat){

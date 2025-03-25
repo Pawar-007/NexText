@@ -76,7 +76,7 @@ const login=asyncHandler(async(req,res)=>{
 })
 // /api/user?user=bhushan
 const alluser=asyncHandler(async(req,res,)=>{
-  console.log("query ",req.query);
+  //console.log("query ",req.query);
     const search=req.query.search?.trim();
     const key=search?
     {
