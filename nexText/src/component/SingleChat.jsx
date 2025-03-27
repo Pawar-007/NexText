@@ -23,6 +23,8 @@ function SingleChat() {
   const [loading,setLoading]=useState(false);
   const [message,setMessage]=useState([]);
   const [socketConnected,setSocketConnected]=useState(false);
+  const [typing,setTyping]=useState(false);
+  const [isTyping,setIsTyping]=useState(false);
   const handleBack=()=>{
    setSelectedChat('');
   }
@@ -32,6 +34,12 @@ function SingleChat() {
        socket.on("connected",()=>
          setSocketConnected(true)
        )
+       socket.on("typing",()=>{
+         setIsTyping(true);
+       })
+       socket.on("stop typing",()=>{
+         setIsTyping(false);
+       })
    },[])
   const fetchMessage=async()=>{
        if(!selectedChat) return;
@@ -44,7 +52,6 @@ function SingleChat() {
             }
          
         const {data}=await axios.get(`app/message/${selectedChat._id}`,config);
-        console.log("message send ",data);
         setMessage(data);
         socket.emit("join room",selectedChat._id);
        } catch (error) {
@@ -74,7 +81,6 @@ function SingleChat() {
 
   useEffect(()=>{
    socket.on("Message recieved",(newMessageRecived)=>{
-      console.log("new message recived",newMessageRecived);
       if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id){
          // give notification 
       }else{
@@ -90,33 +96,9 @@ function SingleChat() {
         socket.off("new Message");  // Clean up to avoid multiple listeners
     };
   })
-// useEffect(() => {
-//     const handleNewMessage = (newMessageRecived) => {
-//         console.log("new message received", newMessageRecived);
-        
-//         if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id) {
-//             // Give notification 
-//         } else {
-//             setMessage((prevMessages) => {
-//            if (prevMessages.some((msg) => msg._id === newMessageRecived._id)) {
-//           return prevMessages; // Return the same state if message already exists
-//           }
-//           return [...prevMessages, newMessageRecived]; // Append new message if not duplicate
-// });
-
-//         }
-//     };
-
-    
-//     socket.off("Message recieved", handleNewMessage); // Ensure no duplicate listeners
-//     socket.on("Message recieved", handleNewMessage);
-
-//     return () => {
-//         socket.off("Message recieved", handleNewMessage); // Cleanup on unmount
-//     };
-// }, [socket, selectedChatCompare]); // Dependencies to re-run the effect
 
   const sendMessage=async(event)=>{
+      socket.emit("stop typing",selectedChat._id);
       if(event.key === 'Enter' && newMessage){
          event.preventDefault();
          try {
@@ -135,7 +117,11 @@ function SingleChat() {
             console.log(`message send ${await data}`);
             
             socket.emit("new Message",data);
-            setMessage([...message,data]);
+            setMessage((prevMessages) => {
+           if (prevMessages.some((msg) => msg._id === data._id)) {
+          return prevMessages; // Return the same state if message already exists
+          }
+          return [...prevMessages, data]; });
 
          } catch (error) {
             toast.error(
@@ -155,11 +141,58 @@ function SingleChat() {
          }
       }
   }
-  const typingHandlar=(e)=>{
-   e.preventDefault();
-        setNewMessage(e.target.value);
-  };
+  
 
+// const typingHandler = (e) => {
+
+//   setNewMessage(e.target.value);
+
+//   if (!socketConnected) return;
+   
+//   if(!typing){
+//       setTyping(true);
+//       socket.emit("typing",selectedChat._id);
+//   }
+//    let typingTimeout;
+//    clearTimeout(typingTimeout);
+//    typingTimeout=new Date().getTime();
+//    console.log("typingTimeout",typingTimeout);
+//    var timeLimit=3000;
+
+//    setTimeout(()=>{
+//          var currentTime=new Date().getTime();
+//          var timeDiff=currentTime-typingTimeout;
+//          console.log(timeDiff);
+//          if(timeDiff>=timeLimit && typing){
+//          setTyping(false);
+//          socket.emit("stop typing",selectedChat._id);
+//       }
+//       },timeLimit);
+      
+   
+   
+// };
+let typingTimeout; // Declare globally at the component level
+
+const typingHandler = (e) => {
+  setNewMessage(e.target.value);  // Update message state
+
+  if (!socketConnected) return;
+
+  if (!typing) {
+    setTyping(true);
+    socket.emit("typing", selectedChat._id); // Emit typing event only once
+  }
+
+  // ✅ Clear previous timeout before setting a new one
+  clearTimeout(typingTimeout);
+
+  // ✅ Set a new timeout to stop typing after 3 seconds
+  typingTimeout = setTimeout(() => {
+    setTyping(false);
+    socket.emit("stop typing", selectedChat._id);
+  }, 3000);
+};
 
   return (
    <>
@@ -237,6 +270,7 @@ function SingleChat() {
          </div>
          <Box>
             <Form>
+         {isTyping?<div>loding...</div>:<></>}
          <Box display="flex" alignItems="center" gap={2}>
          <Form.Control
             onKeyDown={(e) => sendMessage(e)}
@@ -247,7 +281,7 @@ function SingleChat() {
                padding: "10px",
                borderRadius: "5px",
             }}
-            onChange={(e) => typingHandlar(e)}
+            onChange={(e) => typingHandler(e)}
             value={newMessage}
          />
          <Box style={{
