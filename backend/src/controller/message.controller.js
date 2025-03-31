@@ -26,7 +26,6 @@ const sendMessage=asyncHandler(async(req,res)=>{
          populate:{path:"users",select:"name pic email"}
       })
     
-
       await Chat.findByIdAndUpdate(req.body.chatId,{
          latestMessage:message
       })
@@ -54,7 +53,20 @@ const allMessage=asyncHandler(async(req,res)=>{
       throw new Error(error.message);
     }
 })
+
+const unreadMessage=asyncHandler(async(user)=>{
+     console.log("user",user);
+      const unread=await Message.find({chat:{$in :user.chats},delevered:false})
+      .populate("sender","name pic email")
+      .populate("chat")
+      .sort({createdAt:-1})
+
+      Message.updateMany({chat:{$in :user.chats},delevered:false},{
+      delevered:true});
+      return unread;
+})
 export {
    sendMessage,
-   allMessage
+   allMessage,
+   unreadMessage
 }

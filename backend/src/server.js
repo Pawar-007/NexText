@@ -51,23 +51,24 @@ const io=new Server(server,{
 io.on('connection',(socket)=>{
    socket.on("setup",(userData)=>{
       socket.join(userData._id);
-      console.log("setup",userData._id)
       socket.emit("connected");
    })
-
+   
    socket.on("join room",room=>{
       socket.join(room);
       console.log("room join ",room);
      })
    
    socket.on("typing",room=>{
-      
-      socket.in(room).emit("typing");
+      console.log("typing",room);
+      socket.in(room).emit("typing")
    })
 
    socket.on("stop typing",room=>{
       socket.in(room).emit("stop typing");
    })
+
+ 
      
    socket.on("new Message",(newMessage)=>{
       var chat=newMessage.chat;

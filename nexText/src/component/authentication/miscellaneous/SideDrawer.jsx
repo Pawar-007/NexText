@@ -5,6 +5,8 @@ import { Avatar, AvatarGroup } from "@/components/ui/avatar"
 import ProfileModel from './profileModel';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer,toast } from "react-toastify";
+import NotificationBadge, { Effect } from 'react-notification-badge'
+import getSender from '../../../config/ChatLogic.js';
 import {
   DrawerBackdrop,
   DrawerBody,
@@ -27,7 +29,7 @@ function SideDrawer() {
   const [open, setOpen] = useState(false);
   
   const navigate=useNavigate();
-  const {user,setSelectedChat,chats,setChats}= ChatState();
+  const {user,setSelectedChat,chats,setChats,notification,setNotification}= ChatState();
     const logout=()=>{
     localStorage.removeItem("userInfo");
     navigate("/")
@@ -98,8 +100,8 @@ function SideDrawer() {
         }
       }
 
-      const {data}=await axios.post(`http://localhost:8000/app/chats`,{userId},config);
-      
+      const {data}=await axios.post(`/app/chats`,{userId},config);
+      console.log("data",data);
       if(!chats.find(chat=>chat._id===data._id)){setChats([data,...chats])}
       setSelectedChat(data);
       setLoadingChat(false);
@@ -122,6 +124,14 @@ function SideDrawer() {
       setLoadingChat(false);
       setOpen(false);
     }
+  }
+
+  const handleNotification=(notify)=>{
+    if(notify){
+      setSelectedChat(notify?.chat);
+      setNotification(notification.filter(n=>n._id!==notify._id));
+    }
+      
   }
   return (
     <>
@@ -165,6 +175,10 @@ function SideDrawer() {
 
         
          <div className="dropdown">
+          <NotificationBadge
+            count={notification.length}
+            effect={Effect.SCALE}
+          />
           <button
             className="btn btn-secondary"
             type="button"
@@ -173,12 +187,28 @@ function SideDrawer() {
             aria-expanded="false"
           style={{backgroundColor:"white",border:"none",color:"black"}}
           >
-            <i className="fas fa-bell"></i>
+            
+            <i className="fas fa-bell">
+              
+            </i>
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><button className="dropdown-item" type="button">Action</button></li>
-            <li><button className="dropdown-item" type="button">Another action</button></li>
-            <li><button className="dropdown-item" type="button">Something else here</button></li>
+             {
+               notification.length===0?(
+                  <li><button className="dropdown-item" type="button">No notification</button></li>
+               ):null
+             }
+             {
+                notification?.map((notify)=>{
+                  return(
+                    <li key={notify._id}>
+                      <button className="dropdown-item" type="button" onClick={()=>handleNotification(notify)}>
+                        {notify.chat?.isGroupChat?notify.chat?.chatName:getSender(user,notify.chat?.users)} 
+                        </button>
+                    </li>
+                  )
+                })
+              }
           </ul>
             <button
               className="btn btn-secondary"
