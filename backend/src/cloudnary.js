@@ -17,7 +17,6 @@ cloudinary.config({
          resource_type:'image'
       });
       await fs.unlink(lacalPath);
-      console.log("image ",uploaded);
       return uploaded.secure_url;
       
       } catch (error) {

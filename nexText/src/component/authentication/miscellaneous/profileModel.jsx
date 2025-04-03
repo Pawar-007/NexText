@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import {  Image,Text } from '@chakra-ui/react';
-
+import { Avatar, AvatarGroup } from "@/components/ui/avatar"
 
 function ProfileModel({ user, children }) {
   const [show, setShow] = useState(false);
@@ -15,7 +15,11 @@ function ProfileModel({ user, children }) {
           {children}
         </span>
       ) : (
-        <i className="fas fa-bell" onClick={handleShow} style={{ cursor: 'pointer' }}></i>
+        <AvatarGroup>
+          <Avatar  size="small" pic={user?.pic} name={user?.name}
+          onClick={handleShow}
+          ></Avatar>
+     </AvatarGroup>
       )}
 
       <Modal show={show} onHide={handleClose}
@@ -31,7 +35,7 @@ function ProfileModel({ user, children }) {
           borderRadius="full"
           boxSize="150px"
           src={user?.pic}
-          alt={user?.name}
+          name={user?.name}
           />
           <Text
           fontSize={{base:"26px",md:"29px"}}

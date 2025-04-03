@@ -53,14 +53,14 @@ io.on('connection',(socket)=>{
       socket.join(userData._id);
       socket.emit("connected");
    })
-   
+
    socket.on("join room",room=>{
-      socket.join(room);
+
       console.log("room join ",room);
      })
    
    socket.on("typing",room=>{
-      console.log("typing",room);
+     
       socket.in(room).emit("typing")
    })
 
@@ -68,17 +68,17 @@ io.on('connection',(socket)=>{
       socket.in(room).emit("stop typing");
    })
 
- 
+    
      
    socket.on("new Message",(newMessage)=>{
       var chat=newMessage.chat;
-      console.log("new message",newMessage);
+   
       if(!chat.users) return console.log("user not found in chats");
 
       chat.users.forEach(user=>{
          if(user._id===newMessage.sender._id) return;
          let send=socket.in(user._id).emit("Message recieved",newMessage);
-         console.log("send message",send);
+        
       })
    })
 })

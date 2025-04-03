@@ -105,9 +105,9 @@ function MyChats({fetchAgain}) {
              px={3}
              py={2}
              borderRadius="5px"
-             color={selectedChat === chat ? "white" : "black"}
+             color={selectedChat === chat ? "black" : "black"}
              _hover={{color:"white",backgroundColor:"green"}}
-             backgroundColor="gray.200"
+             backgroundColor={selectedChat === chat ? "#d8bfd8" : "white"}
              margin="5px"
             
           >

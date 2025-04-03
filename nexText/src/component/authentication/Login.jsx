@@ -12,7 +12,7 @@ function Login() {
   const handleLogin=async (e)=>{
     e.preventDefault();
     setLoading(true);
-    console.log("email password ",email , password);
+  
     if(!email || !password){
     setLoading(false);
      toast.error(
@@ -32,17 +32,17 @@ function Login() {
     return;
     }
     try {
-      console.log(email," ",password);
+      
       const config={
       headers:{
         "content-type":"application/json"
       }
     }
-    const {data}=await axios.post(`http://localhost:8000/app/user/login`,
+    const {data}=await axios.post(`/app/user/login`,
       {email,password},
       config
     )
-    console.log("data ", data);
+ 
     toast.success(
         <div>
           <strong>Success:</strong> login successfull 

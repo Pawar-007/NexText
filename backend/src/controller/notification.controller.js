@@ -20,12 +20,12 @@ const createNotification =asyncHandler(async(req,res)=>{
 })
 
 const getNotifications=asyncHandler(async(req,res)=>{
-      console.log("userId",req.user);
+
       const userId=req.user._id;
       
       const notification=await Notification.find();
 
-      console.log("notification ",notification);
+   
        
       res.status(200).send(notification);
       

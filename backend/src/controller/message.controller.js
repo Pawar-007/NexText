@@ -55,7 +55,6 @@ const allMessage=asyncHandler(async(req,res)=>{
 })
 
 const unreadMessage=asyncHandler(async(user)=>{
-     console.log("user",user);
       const unread=await Message.find({chat:{$in :user.chats},delevered:false})
       .populate("sender","name pic email")
       .populate("chat")
@@ -65,8 +64,35 @@ const unreadMessage=asyncHandler(async(user)=>{
       delevered:true});
       return unread;
 })
+
+
+
+const markMessagesAsDelivered = async (req, res) => {
+    try {
+        const { chatId } = req.body;
+
+        if (!chatId) {
+            return res.status(400).json({ message: "Chat ID is required" });
+        }
+
+        // Update all messages in this chat that are not delivered
+        await Message.updateMany(
+            { chat: chatId, delivered: false },
+            { $set: { delivered: true } }
+        );
+
+        res.status(200).json({ message: "Messages marked as delivered" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+
 export {
    sendMessage,
    allMessage,
-   unreadMessage
+   unreadMessage,
+   markMessagesAsDelivered
 }

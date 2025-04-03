@@ -225,7 +225,7 @@ async function handleSignup(e){
           />
         </div>
         {error && <p className="error">{error}</p>}
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="avatar">Avatar</label>
           <input 
             type="file" 
@@ -233,7 +233,7 @@ async function handleSignup(e){
             className="input-field file-input" 
             onChange={(e)=>pictureSelected(e.target.files[0])}
           />
-        </div>
+        </div> */}
         <button type="submit" className="submit-btn" disabled={loading}>
         {loading ? (
           <div className="spinner"></div> 

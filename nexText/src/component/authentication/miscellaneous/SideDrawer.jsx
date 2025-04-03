@@ -62,12 +62,11 @@ function SideDrawer() {
       "Authorization": `Bearer ${user.token}`,
        },
       };
-    console.log("search",)
     const data = await axios.get(
-    `http://localhost:8000/app/user?search=${search}`,
+    `/app/user?search=${search}`,
       config
      );
-     console.log("search data ",data);
+     
      setSearchResult(data.data);   
       
      } catch (error) {
@@ -101,7 +100,6 @@ function SideDrawer() {
       }
 
       const {data}=await axios.post(`/app/chats`,{userId},config);
-      console.log("data",data);
       if(!chats.find(chat=>chat._id===data._id)){setChats([data,...chats])}
       setSelectedChat(data);
       setLoadingChat(false);

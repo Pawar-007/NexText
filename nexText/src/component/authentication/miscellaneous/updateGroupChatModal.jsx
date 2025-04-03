@@ -82,7 +82,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
         setNewMember([]);
         return;
        }
-       console.log(query);
+       
        try {
         setloading(true);
         const config={
@@ -92,7 +92,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
         }
 
         const {data}=await axios.get(`/app/user?search=${query}`,config);
-        console.log(data);
+  
         setloading(false);
         setSearchReasult(data);
        } catch (error) {
@@ -130,7 +130,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
           chatId:`${selectedChat._id}`,
           chatName:`${groupChatName}`
         },config);
-        console.log("data",data);
+       
         setSelectedChat(data);
         
         setRenameLoading(false);
@@ -207,7 +207,7 @@ function UpdateGroupChatModal({fetchAgain,setFetchAgain,fetchMessage}) {
         setNewMember([...newMember,user1]);
   }
    const handleDelete=(user)=>{
-    console.log(newMember);
+    
         setNewMember(newMember.filter((u)=>u._id!==user._id));
    }
     

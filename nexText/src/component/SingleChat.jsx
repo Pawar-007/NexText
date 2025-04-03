@@ -84,14 +84,14 @@ function SingleChat() {
   useEffect(()=>{
        socket.on("notification",(notification)=>{
             setNotification(notification);
-            console.log("notification",notification);
+
        })
   },[]);
   useEffect(()=>{
    socket.on("Message recieved",(newMessageRecived)=>{
       if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id){
           if(!notification?.includes(newMessageRecived.chat._id)){
-               console.log("new message",newMessageRecived);
+           
                setNotification([newMessageRecived,...notification]);
                setFetchAgain(!fetchAgain);
 
@@ -110,27 +110,6 @@ function SingleChat() {
     };
   })
 
-const markMessagesAsDelivered = async () => {
-    try {
-        await axios.put("/app/Message/delivered", {
-            chatId: selectedChat._id,
-        }, {
-            headers: { Authorization: `Bearer ${user.token}` },
-        });
-
-        // 🔄 Update UI after marking as delivered
-       setNotification(prevNotifications => [
-            ...prevNotifications,
-            ...message.filter(msg => !msg.delivered).map(msg => ({
-                ...msg, delivered: true
-            }))
-        ]);
-
-    } catch (error) {
-        console.error("Error updating delivered status", error);
-    }
-};
- 
   const sendMessage=async(event)=>{
       socket.emit("stop typing",selectedChat._id);
       if(event.key === 'Enter' && newMessage){
@@ -150,13 +129,11 @@ const markMessagesAsDelivered = async () => {
             },config);
             
             socket.emit("new Message",data);
-            console.log("new Message",data);
             setMessage((prevMessages) => {
            if (prevMessages.some((msg) => msg._id === data._id)) {
           return prevMessages; // Return the same state if message already exists
           }
           return [...prevMessages, data]; });
-             markMessagesAsDelivered();
 
          } catch (error) {
             toast.error(
