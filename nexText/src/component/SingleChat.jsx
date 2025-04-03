@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import ScrollableChat from './ScrollableChat.jsx';
 import { io } from 'socket.io-client';
 import TypingIndicator from './authentication/miscellaneous/typingIndicator.jsx';
-const ENDPOINT='http://localhost:8000'
+const ENDPOINT=import.meta.env.VITE_PATH;
 var socket ,selectedChatCompare;
 
 
