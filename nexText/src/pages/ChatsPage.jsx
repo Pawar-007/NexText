@@ -12,7 +12,6 @@ function ChatsPage() {
     const navigate=useNavigate();
     useEffect(()=>{
       const userInfo=JSON.parse(localStorage.getItem("userInfo"));
-      console.log("chat home ",userInfo);
       if(!userInfo){
         navigate("/");
       }

@@ -173,10 +173,6 @@ function SideDrawer() {
 
         
          <div className="dropdown">
-          <NotificationBadge
-            count={notification.length}
-            effect={Effect.SCALE}
-          />
           <button
             className="btn btn-secondary"
             type="button"
@@ -185,7 +181,10 @@ function SideDrawer() {
             aria-expanded="false"
           style={{backgroundColor:"white",border:"none",color:"black"}}
           >
-            
+             <NotificationBadge
+            count={notification.length}
+            effect={Effect.SCALE}
+          />
             <i className="fas fa-bell">
               
             </i>
