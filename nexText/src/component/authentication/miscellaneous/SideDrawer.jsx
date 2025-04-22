@@ -5,7 +5,6 @@ import { Avatar, AvatarGroup } from "@/components/ui/avatar"
 import ProfileModel from './profileModel';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer,toast } from "react-toastify";
-import NotificationBadge, { Effect } from 'react-notification-badge'
 import getSender from '../../../config/ChatLogic.js';
 import {
   DrawerBackdrop,
@@ -181,13 +180,23 @@ function SideDrawer() {
             aria-expanded="false"
           style={{backgroundColor:"white",border:"none",color:"black"}}
           >
-             <NotificationBadge
-            count={notification.length}
-            effect={Effect.SCALE}
-          />
-            <i className="fas fa-bell">
-              
-            </i>
+            <Box position="relative">
+  <i className="fas fa-bell fa-lg"></i>
+  {notification.length > 0 && (
+    <Box
+      position="absolute"
+      top="-1"
+      right="-1"
+      bg="red.500"
+      color="white"
+      borderRadius="full"
+      px={2}
+      fontSize="xs"
+    >
+      {notification.length}
+    </Box>
+     )}
+    </Box>
           </button>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
              {
