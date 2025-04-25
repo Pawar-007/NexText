@@ -97,7 +97,7 @@ function MyChats({fetchAgain}) {
        <Stack overflowY="scroll"
        
        >
-          {chats.map((chat)=>{
+          {chats?.map((chat)=>{
            return(
               <Box
                key={chat._id}
