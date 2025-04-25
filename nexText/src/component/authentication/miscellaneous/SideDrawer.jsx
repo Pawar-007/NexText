@@ -14,7 +14,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerRoot,
-  DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import ChatLoading from '../../ChatLoading.jsx';
