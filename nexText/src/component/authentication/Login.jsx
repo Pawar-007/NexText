@@ -83,6 +83,57 @@ function Login({setActiveTab}) {
     }
       
   }
+
+  const handleGuestLogin = async () => {
+  setLoading(true);
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    
+    const { data } = await axios.post(`/app/user/guestUser`, {}, config);
+    console.log("guestUser ",data);
+    toast.success(
+      <div>
+        <strong>Success:</strong> Guest session started
+      </div>,
+      {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "colored",
+      }
+    );
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
+    setLoading(false);
+    navigate("/chats");
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || "Failed to start guest session";
+    toast.error(
+      <div>
+        <strong>Error:</strong> {errorMessage}
+      </div>,
+      {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+      }
+    );
+    setLoading(false);
+  }
+};
+
+
   return (
     <>
     <ToastContainer/>
@@ -149,9 +200,10 @@ function Login({setActiveTab}) {
         marginTop: '4px',
         background: 'red',
       }}
-      onClick={() => console.log("Guest user clicked!")}
+      onClick={handleGuestLogin}
+      disabled={loading}
     >
-      Guest user
+      {loading ? "Loading..." : "Continue as Guest"}
     </button>
 
     <button className="signup-prompt"
