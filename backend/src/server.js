@@ -31,12 +31,15 @@ app.use(cors(
       credentials:true
    }
 ));
+
 app.use(express.json());
+app.use(express.static("public"))
+app.use(express.urlencoded({limit:"16kb",extended:true}))
 
 app.get("/",(req,res)=>{
    res.send("server is running successfully ");
 }) 
-
+console.log("server is running successfully",process.env.CLIENT_URL);
 app.use('/app/user',userRouter);
 app.use('/app/chats',chatroute);
 app.use('/app/Message',messageRouter);

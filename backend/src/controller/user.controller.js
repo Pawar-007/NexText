@@ -4,7 +4,6 @@ import { generateToken } from "../config/generateToken.js";
 import { uploadImage } from "../cloudnary.js";
 const registerUser=asyncHandler(async(req,res)=>{
     const {name,email,password}=req.body;
-
     const picture=req.files && req.files.picture ? req.files.picture[0] : null; 
     
     if(!name || !email || !password){

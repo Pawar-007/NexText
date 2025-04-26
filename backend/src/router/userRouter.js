@@ -12,10 +12,11 @@ userRouter.route('/').post(
    uplode.fields([
       { 
       name:"picture", 
-      maxcount:1  
+      maxCount:1  
    }
    ]),
    registerUser)
+// userRouter.route('/').post(registerUser);
 userRouter.route("/").get(protect ,alluser);
 
 userRouter.route('/login').post(login);
