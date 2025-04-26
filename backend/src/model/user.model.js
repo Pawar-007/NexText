@@ -1,20 +1,27 @@
 import mongoose, { Mongoose } from "mongoose";
 import bcrypt from 'bcrypt';
 const userModel=mongoose.Schema({
-   name:{type:String,require:true},
+   name:{type:String,
+      require:true,
+      default: function() {
+      return `Guest_${Math.floor(Math.random() * 9000 + 1000)}`
+    }
+   },
    email:{
       type:String,
-      require:true,
+      required:function() { return !this.isGuest },
       unique:true,
+      sparse: true
    },
    password:{
       type:String,
-      require:true,
+      required:function() { return !this.isGuest },
       unique:true},
    pic:{
       type:String,
-      require:true,
-   }
+   },
+   isGuest: { type: Boolean, default: false },
+   guestExpiresAt: { type: Date }
 },{ timestamps: true })
 
 userModel.pre("save",async function(next){

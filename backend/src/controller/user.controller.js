@@ -89,4 +89,36 @@ const alluser=asyncHandler(async(req,res,)=>{
     return res.send(user); 
 
 })
-export {registerUser,login,alluser};
+
+const guestLogin = asyncHandler(async (req, res) => {
+  try {
+    // Generate random guest username
+    const guestName = `Guest_${Math.floor(Math.random() * 9000 + 1000)}`;
+     console.log("guestUser ",guestName);
+     console.log("guestUser ",Math.floor(Math.random() * 9000 + 1000));
+    // Create guest user
+    const guestUser = await User.create({
+      name: guestName,
+      isGuest: true,
+      email:`guest_${Math.floor(Math.random() * 9000 + 1000)}@example.com`,
+      password: guestName,
+      guestExpiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Expires in 7 days
+    });
+    console.log("guestUser ",guestUser);
+    res.status(200).json({
+      _id: guestUser._id,
+      name: guestUser.name,
+      pic: guestUser.pic,
+      isGuest: true,
+      email: guestUser.email,
+      token: generateToken(guestUser._id)
+    });
+  } catch (error) {
+    console.error("Error during guestLogin:", error.message);
+    res.status(400);
+    throw new Error("Failed to create guest account");
+  }
+});
+
+
+export {registerUser,login,alluser,guestLogin};
