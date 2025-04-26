@@ -103,7 +103,7 @@ async function handleSignup(e){
       form.append('picture',Avatar);
       form.append('password',password);
 
-      const response=await fetch('http://localhost:8000/app/user',{
+      const response=await fetch('/app/user',{
         method:"POST",
         body:form
       }
