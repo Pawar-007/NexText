@@ -4,7 +4,7 @@ import { ToastContainer,toast } from "react-toastify";
 import './auth.css'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-function Login() {
+function Login({setActiveTab}) {
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState('');
   const [loading,setLoading]=useState(false);
@@ -154,9 +154,11 @@ function Login() {
       Guest user
     </button>
 
-    <p className="signup-prompt">
+    <button className="signup-prompt"
+    onClick={() => setActiveTab('signup')}
+    >
       Don't have an account? <span className="signup-link">Sign up</span>
-    </p>
+    </button>
   </form>
 </div>
 

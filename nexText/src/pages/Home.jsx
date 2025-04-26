@@ -99,7 +99,7 @@ function Home() {
           </button>
         </div>
         <div style={styles.content}>
-          {activeTab === 'login' && <Login />}
+          {activeTab === 'login' && <Login setActiveTab={setActiveTab}/>}
           {activeTab === 'signup' && <Signup />}
         </div>
       </div>

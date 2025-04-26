@@ -13,6 +13,9 @@ function Signup() {
   const [Avatar,setAvatar]=useState(); 
   const [error, setError] = useState('');
   const [loading,setLoading]=useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const navigate=useNavigate();
 
 async function pictureSelected(file) {
@@ -100,14 +103,20 @@ async function handleSignup(e){
       const form=new FormData();
       form.append('name',name);
       form.append('email',email);
-      form.append('picture',Avatar);
       form.append('password',password);
+      if (Avatar) {
+      form.append('picture', Avatar);
+      }
 
-      const response=await fetch('/app/user',{
+      for (let [key, value] of form.entries()) {
+        console.log(key, value);
+      }
+      const response=await fetch(`${import.meta.env.VITE_PATH}/app/user`,{
         method:"POST",
         body:form
       }
       )  
+      console.log("response",response);
       if (response.ok) {
       const data = await response.json();
       toast.success(
@@ -202,7 +211,7 @@ async function handleSignup(e){
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input 
-            type="password" 
+            type={showPassword?"text":"password"} 
             id="password" 
             placeholder="Enter your password" 
             className="input-field" 
@@ -210,11 +219,12 @@ async function handleSignup(e){
             value={password}
             onChange={(e)=>setPassword(e.target.value)}
           />
+          <span className="toggle-password" onClick={() => setShowPassword(!showPassword)}/>
         </div>
         <div className="form-group">
           <label htmlFor="password">Conferm Password</label>
           <input 
-            type="password" 
+            type={showConfirmPassword?"text":"password"} 
             id="Confirm-password" 
             placeholder="Conferm password" 
             className="input-field" 
