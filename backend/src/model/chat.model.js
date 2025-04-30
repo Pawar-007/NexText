@@ -14,7 +14,8 @@ const chatModel=mongoose.Schema({
    groupAdmin:{
       type:mongoose.Schema.Types.ObjectId,
       ref:"User"
-   }  
+   },
+  
 },
 { timestamps: true }
 )

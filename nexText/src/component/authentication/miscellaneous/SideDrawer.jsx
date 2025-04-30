@@ -29,6 +29,8 @@ function SideDrawer() {
   const navigate=useNavigate();
   const {user,setSelectedChat,chats,setChats,notification,setNotification}= ChatState();
     const logout=()=>{
+    setSelectedChat("");
+    setChats([]);
     localStorage.removeItem("userInfo");
     navigate("/")
   }

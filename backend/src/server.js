@@ -80,8 +80,7 @@ io.on('connection',(socket)=>{
     
      
    socket.on("new Message",(newMessage)=>{
-      var chat=newMessage.chat;
-   
+      var chat=newMessage.chat;  
       if(!chat.users) return console.log("user not found in chats");
 
       chat.users.forEach(user=>{

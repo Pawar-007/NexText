@@ -2,22 +2,30 @@ import User from "../model/user.model.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { generateToken } from "../config/generateToken.js";
 import { uploadImage } from "../cloudnary.js";
+import Chat from "../model/chat.model.js";
 const registerUser=asyncHandler(async(req,res)=>{
     const {name,email,password}=req.body;
     const picture=req.files && req.files.picture ? req.files.picture[0] : null; 
     
     if(!name || !email || !password){
-      res.status(401); 
+      res.status(400); 
       throw new Error("please enter all the fields ");
     }
  
-    const useExist=await User.findOne({ email });
-
-    if(useExist){
-      res.status(401)
+    const userExist=await User.findOne({ email });
+    if(userExist){
+      res.status(400)
       throw new Error("user allready exist ");
     }
-    
+    let chatboot=await User.findOne({name:"chatbot",email:`${process.env.CHATBOT_EMAIL}`});
+    if(!chatboot){
+      chatboot=await User.create({
+        name:"chatbot",
+        email:`${process.env.CHATBOT_EMAIL}`,
+        password:`${process.env.CHATBOT_EMAIL_PASSWORD}`,
+        
+      });
+    }
   let picUrl= "https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg?t=st=1736782220~exp=1736785820~hmac=83b6fba559704f18b00505d6ebb6bc3ce5c61af566c6750f289c15c896787430&w=740"; // Default image URL
   //  if (picture && picture.path) {
   //     picUrl = await uploadImage(picture.path); 
@@ -32,6 +40,15 @@ const registerUser=asyncHandler(async(req,res)=>{
       password,
       pic:picUrl, 
     })
+    if(user){
+      const chatData={
+        chatName:"sender",
+        isGroupChat:false,
+        users:[user._id,chatboot._id],
+      }
+
+      await Chat.create(chatData);
+    }
     if(user){
       res.status(200).json({
          _id:user._id,
@@ -50,7 +67,7 @@ const login=asyncHandler(async(req,res)=>{
      const {email,password}=req.body;
      console.log("email ",email);
      if(!email || !password){
-      res.status(401)
+      res.status(400)
       throw new Error("invalid crediantial");
      }
      const user=await User.findOne({email});
