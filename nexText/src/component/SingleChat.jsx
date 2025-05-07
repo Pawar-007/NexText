@@ -119,7 +119,7 @@ function SingleChat() {
           content: newMessage,
           chatId: selectedChat._id,
         }, config);
-
+        console.log('Message sent:', data);
         if (data?.isBot) {
           socket.emit('new Message', data.message);
           socket.emit('new Message', data.botMessage);

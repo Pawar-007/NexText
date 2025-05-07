@@ -120,6 +120,7 @@ const chatWithChatBot=asyncHandler (async (req,res)=>{
          chat:chatId,
          content:content
        });
+       console.log("User message created:", userMessage);
       userMessage = await userMessage.populate("sender", "name pic");
       userMessage = await userMessage.populate({
          path: "chat",
@@ -128,6 +129,7 @@ const chatWithChatBot=asyncHandler (async (req,res)=>{
       await Chat.findByIdAndUpdate(req.body.chatId,{
          latestMessage:userMessage
       })
+
       const response = await ai.models.generateContent({
        model: "gemini-2.0-flash",
        contents: `You are an intelligent, helpful assistant in a chat application, similar to Meta AI. 
@@ -136,13 +138,14 @@ const chatWithChatBot=asyncHandler (async (req,res)=>{
       If the question is factual, give accurate and concise information. 
       Avoid unnecessary explanations. Here is the user's message:  ${content}`,
        });
+      console.log("AI response:", response);
       let botReply =response?.text;
       if (!botReply) throw new Error("Invalid bot response");
       let bot=await User.findOne({
          name:"chatbot",
          email:process.env.CHATBOT_EMAIL
       })
-      
+      console.log("Bot user found:", bot);
       let botMessage=await Message.create({
          sender:bot._id,
          chat:chatId,
