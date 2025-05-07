@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: `${process.env.GEMINI_API_KEY}` });
-console.log("AI instance created:", ai);
+
 const sendMessage=asyncHandler(async(req,res)=>{
    const {content,chatId}=req.body;
    
@@ -114,13 +114,12 @@ const chatWithChatBot=asyncHandler (async (req,res)=>{
  
    if(getResponseCount.requestCount < 10){
         try {
-
       let userMessage = await Message.create({
          sender:req.user._id,
          chat:chatId,
          content:content
        });
-       console.log("User message created:", userMessage);
+    
       userMessage = await userMessage.populate("sender", "name pic");
       userMessage = await userMessage.populate({
          path: "chat",
@@ -138,14 +137,14 @@ const chatWithChatBot=asyncHandler (async (req,res)=>{
       If the question is factual, give accurate and concise information. 
       Avoid unnecessary explanations. Here is the user's message:  ${content}`,
        });
-      console.log("AI response:", response);
+   
       let botReply =response?.text;
       if (!botReply) throw new Error("Invalid bot response");
       let bot=await User.findOne({
          name:"chatbot",
          email:process.env.CHATBOT_EMAIL
       })
-      console.log("Bot user found:", bot);
+    
       let botMessage=await Message.create({
          sender:bot._id,
          chat:chatId,
