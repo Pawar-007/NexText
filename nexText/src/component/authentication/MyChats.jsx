@@ -43,6 +43,7 @@ function MyChats({fetchAgain}) {
     borderRadius="1g"
     borderWidth="1px"
     color={"black"}
+     overflowY="auto"
     >
     <Box
     px={3}
@@ -83,19 +84,20 @@ function MyChats({fetchAgain}) {
     
 
     </Box>
-
     <Box
-    d="flex"
-    flexDir="column"
-    p={3}
-    bg="#f8f8f8"
-    overflow="hidden"
-    width="100%"
-    >
+  d="flex"
+  flexDir="column"
+  p={3}
+  bg="#f8f8f8"
+  width="100%"
+  height="500px" // or set based on screen size
+  overflowY="auto"
+>
+
      {
       chats ? (
-       <Stack overflowY="scroll"
-       
+       <Stack
+       overflowY="auto" height="100%"
        >
           {chats?.map((chat)=>{
            return(
@@ -112,8 +114,7 @@ function MyChats({fetchAgain}) {
             
           >
             <Text>
-              {!chat.isGroupChat?getSender(loggedInUser,chat.users):
-              (chat.chatName)}
+              {!chat.isGroupChat?getSender(loggedInUser,chat.users):(chat.chatName)}
             </Text>
           </Box>
             )

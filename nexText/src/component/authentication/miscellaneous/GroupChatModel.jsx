@@ -35,7 +35,7 @@ function GroupChatModel({children}) {
         }
 
         const {data}=await axios.get(`/app/user?search=${query}`,config);
-        console.log(data);
+      
         setLoading(false);
         setSearchResult(data);
        } catch (error) {
@@ -83,12 +83,12 @@ function GroupChatModel({children}) {
 
           const {data}=await axios.post(`/app/chats/group`,{
             name:groupChatName,
-            users:selectedUsers.map(u=>u._id)
+            users:selectedUsers?.map(u=>u._id)
           },config);
 
           setChats([data,...chats]);
           handleClose();
-          setSelectedUsers('');
+          setSelectedUsers([]);
           toast.success(
              <div>
             group successfully created
@@ -120,7 +120,7 @@ function GroupChatModel({children}) {
         }
   }
   const handleGroup=(userToAdd)=>{
-       if(selectedUsers.includes(userToAdd)){
+       if(selectedUsers?.includes(userToAdd)){
         toast.warning(
           <div>
             user is allredy selected
