@@ -123,7 +123,6 @@ function SingleChat() {
         if (data?.isBot) {
           socket.emit('new Message', data.message);
           socket.emit('new Message', data.botMessage);
-
           setMessage((prev) => {
             const updated = [...prev];
             if (!updated.some((msg) => msg._id === data.message._id)) updated.push(data.message);
