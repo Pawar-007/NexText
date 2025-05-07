@@ -7,7 +7,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: `${process.env.GEMINI_API_KEY}` });
-
+console.log("AI instance created:", ai);
 const sendMessage=asyncHandler(async(req,res)=>{
    const {content,chatId}=req.body;
    
